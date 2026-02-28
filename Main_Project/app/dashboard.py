@@ -15,6 +15,10 @@ st.set_page_config(
     layout="wide"
 )
 
+import os
+st.write("Current working dir:", os.getcwd())
+st.write("Files:", os.listdir())
+
 merged_df = pd.read_csv("data/merged_air_quality_data.csv", encoding="latin1")
 cleaned_df = pd.read_csv("data/cleaned_air_quality_data.csv", encoding="latin1")
 treshold_df = pd.read_csv("data/treshold_air_quality_data.csv", encoding="latin1")
