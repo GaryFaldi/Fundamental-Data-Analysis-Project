@@ -8,6 +8,7 @@ import folium
 from folium.plugins import HeatMap
 from streamlit_folium import st_folium
 from sklearn.preprocessing import StandardScaler
+from pathlib import Path
 
 st.set_page_config(
     page_title="Air Quality Analytics Dashboard",
@@ -15,10 +16,12 @@ st.set_page_config(
     layout="wide"
 )
 
-merged_df = pd.read_csv("data/merged_air_quality_data.csv", encoding="latin1")
-cleaned_df = pd.read_csv("data/cleaned_air_quality_data.csv", encoding="latin1")
-treshold_df = pd.read_csv("data/treshold_air_quality_data.csv", encoding="latin1")
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
 
+merged_df = pd.read_csv(DATA_DIR / "merged_air_quality_data.csv", encoding="latin1")
+cleaned_df = pd.read_csv(DATA_DIR / "cleaned_air_quality_data.csv", encoding="latin1")
+treshold_df = pd.read_csv(DATA_DIR / "treshold_air_quality_data.csv", encoding="latin1")
 
 st.title("Data Analytics Project - Asah")
 st.sidebar.title("Page Navigation")
