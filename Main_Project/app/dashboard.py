@@ -15,9 +15,9 @@ st.set_page_config(
     layout="wide"
 )
 
-merged_df = pd.read_csv("../data/merged_air_quality_data.csv", encoding="latin1")
-cleaned_df = pd.read_csv("../data/cleaned_air_quality_data.csv", encoding="latin1")
-treshold_df = pd.read_csv("../data/treshold_air_quality_data.csv", encoding="latin1")
+merged_df = pd.read_csv("data/merged_air_quality_data.csv", encoding="latin1")
+cleaned_df = pd.read_csv("data/cleaned_air_quality_data.csv", encoding="latin1")
+treshold_df = pd.read_csv("data/treshold_air_quality_data.csv", encoding="latin1")
 
 
 st.title("Data Analytics Project - Asah")
