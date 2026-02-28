@@ -29,9 +29,9 @@ Alur kerjanya adalah sebagai berikut:
 #### 5️⃣ Analisis Lanjutan & Peta Interaktif
 * Melakukan klasifikasi kualitas udara, analisis top kasus ekstrem, serta visualisasi spasial menggunakan peta interaktif.
 
-### 📊 2. Dashboard (dashboard.py)
+### 📊 2. Dashboard
 
-dashboard.py adalah aplikasi Streamlit yang mengubah seluruh proses analisis di notebook menjadi dashboard interaktif. Navigasi dilakukan melalui sidebar dengan empat halaman utama:
+[dashboard.py](https://github.com/GaryFaldi/Fundamental-Data-Analysis-Project/blob/main/Main_Project/app/dashboard.py) adalah aplikasi Streamlit yang mengubah seluruh proses analisis di notebook menjadi dashboard interaktif. Navigasi dilakukan melalui sidebar dengan empat halaman utama:
 
 #### 🏠 1. Home
 * Preview dataset, informasi kolom (dtype, missing values), dan statistik deskriptif untuk memberikan gambaran awal data.
