@@ -15,22 +15,14 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- DATA LOADING ---
-# @st.cache_data
-# def load_data():
-#     df = pd.read_csv("cleaned_air_quality_data.csv")
-#     df['datetime'] = pd.to_datetime(df['datetime'])
-#     return df
-
-merged_df = pd.read_csv("merged_air_quality_data.csv", encoding="latin1")
-cleaned_df = pd.read_csv("cleaned_air_quality_data.csv", encoding="latin1")
-treshold_df = pd.read_csv("treshold_air_quality_data.csv", encoding="latin1")
+merged_df = pd.read_csv("data/merged_air_quality_data.csv", encoding="latin1")
+cleaned_df = pd.read_csv("data/cleaned_air_quality_data.csv", encoding="latin1")
+treshold_df = pd.read_csv("data/treshold_air_quality_data.csv", encoding="latin1")
 
 
 st.title("Data Analytics Project - Asah")
 st.sidebar.title("Page Navigation")
 st.sidebar.markdown("Kadek Gary Faldi - garyfaldi1@gmail.com")
-st.sidebar.markdown("Select a page to navigate through the app.")
 page = st.sidebar.selectbox("Choose your page", ["Home", "Data Cleaning", "Data Exploration", "Analisis Lanjutan"])
 
 if page == "Home":
