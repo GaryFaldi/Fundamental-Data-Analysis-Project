@@ -2,7 +2,7 @@
 
 ## 📌 Deskripsi Proyek
 
-Proyek ini merupakan proyek yang menganalisis kualitas udara berbasis Python yang dirancang untuk mengeksplorasi, memvisualisasikan, dan menganalisis dataset (`PRSA_Data_20130301–20170228`). Dataset tersebut berisi data pengukuran polusi udara dari berbagai stasiun pemantauan yang tersebar di Beijing, Tiongkok, dengan rentang waktu pengamatan dari 1 Maret 2013 hingga 28 Februari 2017.
+Proyek ini merupakan proyek yang menganalisis kualitas udara berbasis Python yang dirancang untuk mengeksplorasi, memvisualisasikan, dan menganalisis dataset [PRSA_Data_20130301–20170228](https://drive.google.com/file/d/1RhU3gJlkteaAQfyn9XOVAz7a5o1-etgr/view). Dataset tersebut berisi data pengukuran polusi udara dari berbagai stasiun pemantauan yang tersebar di Beijing, Tiongkok, dengan rentang waktu pengamatan dari 1 Maret 2013 hingga 28 Februari 2017.
 
 Proyek ini dikembangkan sebagai bagian dari tugas proyek analisis data pada kelas Belajar Fundamental Analisis Data yang diselenggarakan oleh Dicoding.
 
@@ -29,41 +29,30 @@ Alur kerjanya adalah sebagai berikut:
 #### 5️⃣ Analisis Lanjutan & Peta Interaktif
 * Melakukan klasifikasi kualitas udara, analisis top kasus ekstrem, serta visualisasi spasial menggunakan peta interaktif.
 
-### 📊 Dashboard
-
-📊 Dashboard (dashboard.py)
+### 📊 2. Dashboard (dashboard.py)
 
 dashboard.py adalah aplikasi Streamlit yang mengubah seluruh proses analisis di notebook menjadi dashboard interaktif. Navigasi dilakukan melalui sidebar dengan empat halaman utama:
 
-🏠 Home
+#### 🏠 1. Home
+* Preview dataset, informasi kolom (dtype, missing values), dan statistik deskriptif untuk memberikan gambaran awal data.
 
-Preview dataset, informasi kolom (dtype, missing values), dan statistik deskriptif untuk memberikan gambaran awal data.
+#### 🧹 2. Data Cleaning
+* Penjelasan proses preprocessing (konversi datetime, penanganan missing values, outlier) serta preview data hasil pembersihan.
 
-🧹 Data Cleaning
+#### 📈 3. Data Exploration
+* Eksplorasi interaktif berdasarkan stasiun:
+* Tren tahunan dan perbandingan polutan
+* Pola meteorologi
+* Variasi bulanan & musiman
+* Analisis korelasi
+* Pola harian jam sibuk
 
-Penjelasan proses preprocessing (konversi datetime, penanganan missing values, outlier) serta preview data hasil pembersihan.
-
-📈 Data Exploration
-
-Eksplorasi interaktif berdasarkan stasiun:
-
-Tren tahunan dan perbandingan polutan
-
-Pola meteorologi
-
-Variasi bulanan & musiman
-
-Analisis korelasi
-
-Pola harian jam sibuk
-
-🔬 Analisis Lanjutan
-
-Top 5 konsentrasi tertinggi, klasifikasi kualitas udara, heatmap korelasi, dan peta interaktif PM2.5 & PM10.
+#### 🔬 4. Analisis Lanjutan
+* Top 5 konsentrasi tertinggi, klasifikasi kualitas udara, heatmap korelasi, dan peta interaktif PM2.5 & PM10.
 
 Dashboard ini merepresentasikan alur analisis lengkap dalam bentuk visual dan interaktif untuk memudahkan pemahaman insight kualitas udara.
 
-## 🛠️ Teknologi yang Digunakan
+## 🛠️ 3. Teknologi yang Digunakan
 
 - Python 3.13.2
 - Streamlit
@@ -77,8 +66,9 @@ Dashboard ini merepresentasikan alur analisis lengkap dalam bentuk visual dan in
 - Joblib
 
 
-## 📂 Struktur Folder
+## 📂 4. Struktur Folder
 
+```
 Main_Project/
 ├── app/
 │   ├── data/
@@ -88,12 +78,12 @@ Main_Project/
 │   ├── Proyek_Analisis_Data.ipynb
 │   └── dashboard.py
 ├── dataset/
-├── requirements.txt (inside app)
+├── requirements.txt
 ├── .gitignore
-├── requirements.txt (root)
 └── url.txt
+```
 
-## Cara Menjalankan
+## 🚀 5. Cara Menjalankan
 ### Langkah 1: Instalasi
 
 Pastikan Python sudah terinstall, lalu install library yang dibutuhkan:
@@ -104,7 +94,7 @@ pip install -r requirements.txt
 
 ### Langkah 2: Analisis pada notebook
 
-Anda bisa melakukan analisis langsung pada file notebook yang tersedia (`Proyek_Analisis_Data.ipynb`). Jika visualisasi peta menggunakan folium tidak tampil, ini dikarenakan Visualisasi peta pada notebook ini dibuat menggunakan library folium, yang menghasilkan output berbasis HTML dan JavaScript (Leaflet.js).
+Anda bisa melakukan analisis langsung pada file notebook yang tersedia [Proyek_Analisis_Data.ipynb](https://github.com/GaryFaldi/Fundamental-Data-Analysis-Project/blob/main/Main_Project/app/Proyek_Analisis_Data.ipynb). Jika visualisasi peta menggunakan folium tidak tampil, ini dikarenakan Visualisasi peta pada notebook ini dibuat menggunakan library folium, yang menghasilkan output berbasis HTML dan JavaScript (Leaflet.js).
 
 Perlu diketahui bahwa:
 Preview notebook di GitHub, Vs code, atau beberapa code editor lainnya hanya menampilkan konten statis.
@@ -122,9 +112,10 @@ Dengan demikian, apabila visualisasi peta tidak tampil pada preview GitHub, hal 
 ### Langkah 3: Menjalankan Dashboard
 
 Ada dua opsi untuk menjalankan dashboard, yaitu lewat localhost atau versi deploy. Berikut cara menjalankan keduanya :
+
 #### 1. Jalankan di Browser yang sudah di deploy
 
-Untuk run web yang sudah di deploy, tinggal buka link berikut : [prsa-air-pollution-data-analysis.streamlit.app]
+Untuk run web yang sudah di deploy, tinggal buka link berikut : [prsa-air-pollution-data-analysis.streamlit.app](https://prsa-air-pollution-data-analysis.streamlit.app)
 
 #### 2. jalankan di Browser localhost
 
