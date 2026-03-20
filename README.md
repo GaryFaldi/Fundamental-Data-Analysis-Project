@@ -54,7 +54,7 @@ Dashboard ini merepresentasikan alur analisis lengkap dalam bentuk visual dan in
 
 ## 🛠️ 3. Teknologi yang Digunakan
 
-- Python 3.13.2
+- Python 3.9
 - Streamlit
 - Pandas
 - NumPy
@@ -84,15 +84,30 @@ Main_Project/
 ```
 
 ## 🚀 5. Cara Menjalankan
-### Langkah 1: Instalasi
 
-Pastikan Python sudah terinstall, lalu install library yang dibutuhkan:
+### Setup Environment
+
+Pilih salah satu metode berikut sesuai preferensi yang diinginkan:
+
+#### Menggunakan Anaconda
 
 ```bash
+conda create --name air-quality-ds python=3.9
+conda activate air-quality-ds
 pip install -r requirements.txt
 ```
 
-### Langkah 2: Analisis pada notebook
+#### Menggunakan Shell/Terminal (pipenv)
+
+```bash
+mkdir proyek_analisis_data
+cd proyek_analisis_data
+pipenv install
+pipenv shell
+pip install -r requirements.txt
+```
+
+### Langkah 1: Analisis pada Notebook
 
 Anda bisa melakukan analisis langsung pada file notebook yang tersedia [Proyek_Analisis_Data.ipynb](https://github.com/GaryFaldi/Fundamental-Data-Analysis-Project/blob/main/Main_Project/app/Proyek_Analisis_Data.ipynb). Jika visualisasi peta menggunakan folium tidak tampil, ini dikarenakan Visualisasi peta pada notebook ini dibuat menggunakan library folium, yang menghasilkan output berbasis HTML dan JavaScript (Leaflet.js).
 
@@ -109,19 +124,17 @@ nbviewer akan merender notebook dengan lebih lengkap karena mendukung tampilan o
 
 Dengan demikian, apabila visualisasi peta tidak tampil pada preview GitHub, hal tersebut bukan merupakan kesalahan kode, melainkan keterbatasan dari sistem rendering terhadap konten berbasis JavaScript.
 
-### Langkah 3: Menjalankan Dashboard
+### Langkah 2: Menjalankan Dashboard
 
-Ada dua opsi untuk menjalankan dashboard, yaitu lewat localhost atau versi deploy. Berikut cara menjalankan keduanya :
+Ada dua opsi untuk menjalankan dashboard, yaitu lewat localhost atau versi deploy. Berikut cara menjalankan keduanya:
 
 #### 1. Jalankan di Browser yang sudah di deploy
 
-Untuk run web yang sudah di deploy, tinggal buka link berikut : [prsa-air-pollution-data-analysis.streamlit.app](https://prsa-air-pollution-data-analysis.streamlit.app)
+Untuk run web yang sudah di deploy, tinggal buka link berikut: [prsa-air-pollution-data-analysis.streamlit.app](https://prsa-air-pollution-data-analysis.streamlit.app)
 
-#### 2. jalankan di Browser localhost
+#### 2. Jalankan di Browser localhost
 
-Buka folder Projeknya.
-Buka new Terminal (Ctrl + Shift + `) jika di VSCode.
-Jalankan perintah berikut di terminal:
+Pastikan sudah mengaktifkan virtual environment (lihat **Setup Environment** di atas), lalu jalankan perintah berikut:
 
 ```bash
 streamlit run Main_Project/app/dashboard.py
@@ -131,4 +144,4 @@ Aplikasi akan otomatis terbuka di browser Anda (biasanya di `http://localhost:85
 
 -----
 
-**Created for Data Analytics Project - Asah**
+**Created for Data Analytics Project - Dicoding**
