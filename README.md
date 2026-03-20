@@ -118,7 +118,9 @@ Akibatnya, visualisasi peta interaktif tidak akan dirender dengan sempurna pada 
 
 Notebook ini telah dijalankan sepenuhnya dan seluruh output telah tersimpan sebelum diunggah. Untuk melihat visualisasi peta secara utuh dan interaktif, silakan buka notebook melalui nbviewer pada tautan berikut:
 
-🔗 [https://nbviewer.org/github/GaryFaldi/Fundamental-Data-Analysis-Project/blob/main/Main_Project/app/Proyek_Analisis_Data.ipynb?flush_cache=true]
+🔗 [Nbviewer](https://nbviewer.org/github/GaryFaldi/Fundamental-Data-Analysis-Project/blob/main/Main_Project/app/Proyek_Analisis_Data.ipynb?flush_cache=true)
+
+🔗 [Google Colab](https://colab.research.google.com/drive/1zlJAyYWjxUaHa6qePZSOJV9feLRUwO8A)
 
 nbviewer akan merender notebook dengan lebih lengkap karena mendukung tampilan output HTML yang dihasilkan oleh folium.
 
