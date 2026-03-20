@@ -116,7 +116,7 @@ Preview notebook di GitHub, Vs code, atau beberapa code editor lainnya hanya men
 Hal ini tidak mengeksekusi JavaScript demi alasan keamanan.
 Akibatnya, visualisasi peta interaktif tidak akan dirender dengan sempurna pada tampilan preview notebook.
 
-Notebook ini telah dijalankan sepenuhnya dan seluruh output telah tersimpan sebelum diunggah. Untuk melihat visualisasi peta secara utuh dan interaktif, silakan buka notebook melalui nbviewer pada tautan berikut:
+Notebook ini telah dijalankan sepenuhnya dan seluruh output telah tersimpan sebelum diunggah. Untuk melihat visualisasi peta secara utuh dan interaktif, silakan buka notebook melalui tautan berikut:
 
 🔗 [Nbviewer](https://nbviewer.org/github/GaryFaldi/Fundamental-Data-Analysis-Project/blob/main/Main_Project/app/Proyek_Analisis_Data.ipynb?flush_cache=true)
 
