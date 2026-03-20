@@ -26,9 +26,281 @@ treshold_df = pd.read_csv(DATA_DIR / "treshold_air_quality_data.csv", encoding="
 st.title("Data Analytics Project - Asah")
 st.sidebar.title("Page Navigation")
 st.sidebar.markdown("Kadek Gary Faldi - garyfaldi1@gmail.com")
-page = st.sidebar.selectbox("Choose your page", ["Home", "Data Cleaning", "Data Exploration", "Analisis Lanjutan"])
+page = st.sidebar.selectbox("Choose your page", ["Home", "Dataset Overview", "Data Cleaning", "Data Exploration", "Analisis Lanjutan"])
 
 if page == "Home":
+    st.header("🌍 Air Quality Data Analysis Dashboard")
+    st.markdown("""
+    Proyek ini bertujuan untuk menganalisis data kualitas udara di Beijing dari tahun 2013 hingga 2017.
+    Dataset mencakup berbagai parameter polusi udara seperti **PM2.5, PM10, SO2, NO2, CO, O3**,
+    serta variabel meteorologi seperti **suhu, tekanan, kelembaban, curah hujan, dan kecepatan angin**.
+
+    Melalui dashboard ini, pengguna dapat menjelajahi tren polusi udara, memahami hubungan antara
+    faktor cuaca dan kualitas udara, serta mendapatkan wawasan mendalam tentang kondisi lingkungan
+    di Beijing selama periode tersebut.
+    """)
+
+    # ── Precompute shared data (all stations) ──
+    _df = cleaned_df.copy()
+    _df['datetime'] = pd.to_datetime(_df['datetime'], errors='coerce')
+    _df = _df.dropna(subset=['datetime'])
+    _df['month'] = _df['datetime'].dt.month
+    _df['hour']  = _df['datetime'].dt.hour
+ 
+    POLLUTANTS = ["PM2.5", "PM10", "SO2", "NO2", "CO", "O3"]
+ 
+    def _get_season(m):
+        if m in [12, 1, 2]: return 'Winter'
+        elif m in [3, 4, 5]: return 'Spring'
+        elif m in [6, 7, 8]: return 'Summer'
+        else: return 'Autumn'
+ 
+    _df['season'] = _df['month'].apply(_get_season)
+    scaler = StandardScaler()
+ 
+    st.subheader("📌 Business Questions")
+ 
+    with st.expander("1️⃣ Karakteristik Polusi (Kualitas Udara)"):
+        st.markdown("""
+        - **Tren Tahunan:** "Bagaimana tren konsentrasi rata-rata tahunan partikulat halus ($PM2.5$) di seluruh stasiun selama periode 2013 hingga 2017? Apakah terjadi penurunan yang signifikan?"
+        - **Perbandingan Lokasi:** "Stasiun (kota) manakah yang memiliki tingkat polusi udara tertinggi (berdasarkan rata-rata $PM2.5$ atau $PM10$) dalam rentang waktu yang diamati?"
+        - **Variasi Musiman:** "Bagaimana variasi bulanan konsentrasi polutan $O3$ dibandingkan dengan $NO2$? Apakah polutan tertentu cenderung meningkat pada musim tertentu?"
+        """)
+ 
+    with st.expander("2️⃣ Hubungan Parameter Cuaca (Meteorologi)"):
+        st.markdown("""
+        - **Pengaruh Hujan/Angin:** "Sejauh mana pengaruh curah hujan ($RAIN$) dan kecepatan angin ($WSPM$) terhadap penurunan konsentrasi $PM2.5$ di stasiun tertentu?"
+        - **Korelasi Suhu:** "Apakah terdapat korelasi positif atau negatif antara suhu udara ($TEMP$) dengan tingkat polutan gas seperti $O3$ atau $SO2$?"
+        """)
+ 
+    with st.expander("3️⃣ Pola Waktu Spesifik"):
+        st.markdown("""
+        - **Analisis Jam Sibuk:** "Bagaimana pola fluktuasi harian (per jam) dari konsentrasi $CO$ dan $NO2$? Apakah terdapat puncak polusi pada jam-jam tertentu yang mengindikasikan aktivitas transportasi?"
+        """)
+ 
+    st.subheader("💡 Analysis Results")
+ 
+    with st.expander("Insight — Pertanyaan 1: Karakteristik Polusi"):
+        st.markdown("""
+        - **Tren tahunan PM2.5** menunjukkan fluktuasi tanpa penurunan jangka panjang yang konsisten, dengan peningkatan signifikan pada 2014 dan 2017 serta penurunan sementara pada 2015–2016, mengindikasikan bahwa upaya pengendalian polusi belum memberikan dampak berkelanjutan dan masih dipengaruhi kuat oleh faktor eksternal seperti cuaca dan aktivitas manusia.
+
+        - **Variasi spasial** antar stasiun sangat jelas, di mana stasiun perkotaan seperti Dongsi dan Wanliu memiliki konsentrasi PM2.5 dan PM10 tertinggi dibandingkan stasiun pinggiran seperti Dingling, menegaskan bahwa kepadatan penduduk, transportasi, dan aktivitas industri berkontribusi besar terhadap polusi udara.
+
+        - **Pola musiman** polutan sangat dipengaruhi kondisi meteorologi, dengan curah hujan rendah dan kecepatan angin lemah di musim dingin yang memperparah akumulasi polutan, sementara di musim panas hujan dan angin lebih tinggi membantu menurunkan konsentrasi.
+
+        - **Perilaku polutan gas** berbeda secara musiman, di mana PM2.5, PM10, NO2, SO2, dan CO memuncak di musim dingin akibat pembakaran bahan bakar dan keterbatasan dispersi, sedangkan O3 justru meningkat di musim panas karena proses fotokimia yang dipicu suhu tinggi.
+        """)
+ 
+        # ── Chart 1: Tren Tahunan PM2.5 ──
+        st.subheader("Tren Konsentrasi PM2.5 Tahunan")
+        yearly_df = (
+            _df.set_index('datetime')
+            .resample('YE')
+            .mean(numeric_only=True)
+            .reset_index()
+        )
+        years  = yearly_df['datetime'].dt.year
+        values = yearly_df['PM2.5']
+ 
+        fig1, ax1 = plt.subplots(figsize=(10, 5))
+        ax1.bar(years, values, alpha=0.6, color='skyblue', label='Rata-rata PM2.5')
+        ax1.plot(years, values, marker='o', linewidth=2, color='orange', label='Tren PM2.5')
+        for x, y in zip(years, values):
+            ax1.text(x, y + 0.5, f'{y:.1f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
+        ax1.set_title('Tren Tahunan PM2.5 (Semua Stasiun)')
+        ax1.set_xlabel('Tahun')
+        ax1.set_ylabel('Konsentrasi (µg/m³)')
+        ax1.legend()
+        fig1.tight_layout()
+        st.pyplot(fig1)
+        plt.close(fig1)
+ 
+        st.divider()
+ 
+        # ── Chart 2: Perbandingan PM2.5 vs PM10 per Stasiun ──
+        st.subheader("Perbandingan PM2.5 vs PM10 per Stasiun")
+        station_mean = _df.groupby('station')[['PM2.5', 'PM10']].mean().reset_index()
+        x_idx = np.arange(len(station_mean['station']))
+        width = 0.35
+ 
+        fig2, ax2 = plt.subplots(figsize=(10, 6))
+        ax2.bar(x_idx - width/2, station_mean['PM2.5'], width, label='PM2.5', color='#3498db')
+        ax2.bar(x_idx + width/2, station_mean['PM10'],  width, label='PM10',  color='#fd7200')
+        ax2.set_xticks(x_idx)
+        ax2.set_xticklabels(station_mean['station'], rotation=45, ha='right')
+        ax2.set_title('Rata-rata PM2.5 vs PM10 per Stasiun (Semua Tahun)')
+        ax2.set_ylabel('Konsentrasi (µg/m³)')
+        ax2.legend()
+        fig2.tight_layout()
+        st.pyplot(fig2)
+        plt.close(fig2)
+ 
+        st.divider()
+ 
+        # ── Chart 3 & 4: Pola Curah Hujan & Kecepatan Angin ──
+        col_rain, col_wind = st.columns(2)
+        monthly_rain = _df.groupby('month')['RAIN'].mean()
+        monthly_wind = _df.groupby('month')['WSPM'].mean()
+ 
+        with col_rain:
+            st.subheader("Pola Curah Hujan")
+            fig3, ax3 = plt.subplots(figsize=(5, 4))
+            ax3.bar(monthly_rain.index, monthly_rain.values, color='#005eff')
+            ax3.set_title('Rata-rata Curah Hujan (mm/jam)')
+            ax3.set_xlabel('Bulan')
+            ax3.set_ylabel('RAIN (mm/jam)')
+            fig3.tight_layout()
+            st.pyplot(fig3)
+            plt.close(fig3)
+ 
+        with col_wind:
+            st.subheader("Pola Kecepatan Angin")
+            fig4, ax4 = plt.subplots(figsize=(5, 4))
+            ax4.bar(monthly_wind.index, monthly_wind.values, color='#00fffb')
+            ax4.set_title('Rata-rata Kecepatan Angin (m/s)')
+            ax4.set_xlabel('Bulan')
+            ax4.set_ylabel('WSPM (m/s)')
+            fig4.tight_layout()
+            st.pyplot(fig4)
+            plt.close(fig4)
+ 
+        st.divider()
+ 
+        # ── Chart 5: Variasi Bulanan Polutan (Z-Score) ──
+        st.subheader("Variasi Bulanan Polutan (Z-Score)")
+        monthly_mean = _df.groupby('month')[POLLUTANTS].mean()
+        monthly_scaled = pd.DataFrame(
+            scaler.fit_transform(monthly_mean),
+            index=monthly_mean.index,
+            columns=monthly_mean.columns
+        )
+ 
+        fig5, ax5 = plt.subplots(figsize=(10, 5))
+        for col in monthly_scaled.columns:
+            ax5.plot(monthly_scaled.index, monthly_scaled[col], marker='o', label=col)
+        ax5.set_title('Variasi Bulanan Polutan Z-Score (Semua Stasiun)')
+        ax5.set_xlabel('Bulan')
+        ax5.set_ylabel('Z-Score')
+        ax5.set_xticks(range(1, 13))
+        ax5.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=8)
+        fig5.tight_layout()
+        st.pyplot(fig5)
+        plt.close(fig5)
+ 
+        st.divider()
+ 
+        # ── Chart 6: Variasi Musiman Polutan ──
+        st.subheader("Variasi Musiman Polutan")
+        seasonal_mean = (
+            _df.groupby('season')[POLLUTANTS]
+            .mean()
+            .reindex(['Winter', 'Spring', 'Summer', 'Autumn'])
+        )
+        seasonal_scaled = pd.DataFrame(
+            scaler.fit_transform(seasonal_mean),
+            index=seasonal_mean.index,
+            columns=seasonal_mean.columns
+        )
+ 
+        fig6, ax6 = plt.subplots(figsize=(10, 5))
+        for col in seasonal_scaled.columns:
+            ax6.plot(seasonal_scaled.index, seasonal_scaled[col], marker='o', label=col)
+        ax6.set_title('Variasi Musiman Polutan Z-Score (Semua Stasiun)')
+        ax6.set_ylabel('Z-Score')
+        ax6.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=8)
+        fig6.tight_layout()
+        st.pyplot(fig6)
+        plt.close(fig6)
+ 
+    with st.expander("Insight — Pertanyaan 2: Hubungan Parameter Cuaca"):
+        st.markdown("""
+        - **Angin memiliki pengaruh yang jauh lebih kuat** dibandingkan hujan dalam menurunkan PM2.5, karena peningkatan kecepatan angin secara konsisten berkorelasi dengan penurunan konsentrasi polutan, sementara hujan hanya efektif pada intensitas tinggi yang jarang terjadi.
+
+        - **Suhu berkorelasi positif dengan O3 namun lemah terhadap SO2**, menunjukkan bahwa pembentukan O3 sangat dipengaruhi proses atmosfer dan radiasi matahari, sedangkan SO2 lebih didominasi oleh sumber emisi antropogenik seperti industri dan pembakaran bahan bakar.
+        """)
+ 
+        sample_df = _df.sample(min(len(_df), 1600), random_state=42)
+ 
+        # ── Chart 7 & 8: Korelasi Meteorologi vs PM2.5 ──
+        st.subheader("Korelasi Meteorologi vs PM2.5")
+        col_c1, col_c2 = st.columns(2)
+ 
+        with col_c1:
+            fig7, ax7 = plt.subplots(figsize=(5, 4))
+            sns.scatterplot(data=sample_df, x='RAIN', y='PM2.5', alpha=0.5, ax=ax7)
+            ax7.set_title('Curah Hujan vs PM2.5')
+            ax7.set_xlabel('RAIN (mm/jam)')
+            ax7.set_ylabel('PM2.5 (µg/m³)')
+            fig7.tight_layout()
+            st.pyplot(fig7)
+            plt.close(fig7)
+ 
+        with col_c2:
+            fig8, ax8 = plt.subplots(figsize=(5, 4))
+            sns.scatterplot(data=sample_df, x='WSPM', y='PM2.5', alpha=0.5, color='#0099ff', ax=ax8)
+            ax8.set_title('Kecepatan Angin vs PM2.5')
+            ax8.set_xlabel('WSPM (m/s)')
+            ax8.set_ylabel('PM2.5 (µg/m³)')
+            fig8.tight_layout()
+            st.pyplot(fig8)
+            plt.close(fig8)
+ 
+        st.divider()
+ 
+        # ── Chart 9 & 10: Pengaruh Suhu terhadap O3 & SO2 ──
+        st.subheader("Pengaruh Suhu terhadap O3 & SO2")
+        col_c3, col_c4 = st.columns(2)
+ 
+        with col_c3:
+            fig9, ax9 = plt.subplots(figsize=(5, 4))
+            ax9.scatter(sample_df['TEMP'], sample_df['O3'], alpha=0.3, color='#1900ff', s=10)
+            ax9.set_title('Suhu vs O3')
+            ax9.set_xlabel('TEMP (°C)')
+            ax9.set_ylabel('O3 (µg/m³)')
+            fig9.tight_layout()
+            st.pyplot(fig9)
+            plt.close(fig9)
+ 
+        with col_c4:
+            fig10, ax10 = plt.subplots(figsize=(5, 4))
+            ax10.scatter(sample_df['TEMP'], sample_df['SO2'], alpha=0.3, color='#007bff', s=10)
+            ax10.set_title('Suhu vs SO2')
+            ax10.set_xlabel('TEMP (°C)')
+            ax10.set_ylabel('SO2 (µg/m³)')
+            fig10.tight_layout()
+            st.pyplot(fig10)
+            plt.close(fig10)
+ 
+    with st.expander("Insight — Pertanyaan 3: Pola Waktu Spesifik"):
+        st.markdown("""
+        - Polutan gas CO dan NO2 menunjukkan **pola harian yang konsisten dengan aktivitas manusia**, dengan puncak
+          konsentrasi pada pagi dan malam hari (jam sibuk transportasi). NO2 lebih fluktuatif
+          dibandingkan CO, menandakan sensitivitas tinggi terhadap perubahan intensitas lalu lintas.
+        """)
+ 
+        # ── Chart 11: Fluktuasi Harian CO vs NO2 ──
+        st.subheader("Pola Fluktuasi Harian (CO vs NO2)")
+        hourly_mean = _df.groupby('hour')[['CO', 'NO2']].mean()
+        hourly_scaled = pd.DataFrame(
+            scaler.fit_transform(hourly_mean),
+            index=hourly_mean.index,
+            columns=hourly_mean.columns
+        )
+ 
+        fig11, ax11 = plt.subplots(figsize=(10, 5))
+        ax11.plot(hourly_scaled.index, hourly_scaled['CO'],  marker='o', label='CO',  color='#ff8c00')
+        ax11.plot(hourly_scaled.index, hourly_scaled['NO2'], marker='o', label='NO2', color='#1900ff')
+        ax11.set_title('Pola Fluktuasi Harian CO vs NO2 (Z-Score, Semua Stasiun)')
+        ax11.set_xlabel('Jam')
+        ax11.set_ylabel('Z-Score')
+        ax11.set_xticks(range(0, 24))
+        ax11.legend()
+        fig11.tight_layout()
+        st.pyplot(fig11)
+        plt.close(fig11)
+
+
+elif page == "Dataset Overview":
     st.header("Welcome to the Data Analytics Project - Asah")
     st.subheader("Dataset Preview")
 
@@ -229,7 +501,6 @@ elif page == "Data Cleaning":
             st.rerun()
 
 
-# --- 3️⃣ PAGE: DATA EXPLORATION ---
 elif page == "Data Exploration":
     st.title("📊 Exploratory Data Analysis")
 
@@ -412,7 +683,6 @@ elif page == "Data Exploration":
         ax11.legend()
         st.pyplot(fig11)
 
-# --- 4️⃣ PAGE: Analisis Lanjutan ---
 elif page == "Analisis Lanjutan":
     st.title("💡 Analisis Lanjutan")
 
